@@ -40,12 +40,6 @@ object JDBCLoad {
         println(s"$sourceQueryName: $sourceQuery")
         println(s"$targetQueryName: $targetQuery")
 
-<<<<<<< HEAD
-=======
-        //        val sourceDF = spark.sqlContext.read.jdbc(url, s"($sourceQuery) as mysqlTable", mysqlProperties)
-        //        val targetDF = spark.sqlContext.sql(targetQuery)
-
->>>>>>> aa5e6b7a9b0722d7626246cbca3167ccad5d5546
         var sourceDF: org.apache.spark.sql.DataFrame = null
         var targetDF: org.apache.spark.sql.DataFrame = null
 
@@ -67,11 +61,7 @@ object JDBCLoad {
 
     results.toArray.foreach(println)
 
-<<<<<<< HEAD
   } //main
-=======
-  }
->>>>>>> aa5e6b7a9b0722d7626246cbca3167ccad5d5546
 
   def getDataFrame(source: String, query: String): Option[org.apache.spark.sql.DataFrame] = {
     source match {
