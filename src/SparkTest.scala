@@ -42,7 +42,7 @@ object SparkTest {
     val props = new OrderedProperties(fileName)
     var queryPairs: Iterator[List[String]] = null
     try {
-      val queryPairs = props.getLinePairs().get
+      val queryPairs = props.getValidQueryPairs()
     } catch {
       case e: NoSuchElementException =>
         e.printStackTrace()

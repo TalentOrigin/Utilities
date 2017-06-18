@@ -18,7 +18,7 @@ object JDBCLoad {
 
     var queryPairs: Iterator[List[String]] = null
     try {
-      queryPairs = orderedProperties.getLinePairs().get
+      queryPairs = orderedProperties.getValidQueryPairs()
     } catch {
       case e: NoSuchElementException =>
         e.printStackTrace()

@@ -4,13 +4,12 @@ import java.io.FileNotFoundException
 
 class OrderedProperties(fileName: String) {
 
-  def getLinePairs(): Option[Iterator[List[String]]] = {
-
+  private def getQueryPairs(): Option[Iterator[List[String]]] = {
     val status = validateConfigFile()
     if (status) {
       try {
         val pairs = Source.fromFile(fileName).getLines()
-          .filter(!_.isEmpty)
+          .filter(line => (!line.isEmpty) && (!line.startsWith("##")))
           .map(_.trim())
           .toList
           .grouped(2)
@@ -30,9 +29,20 @@ class OrderedProperties(fileName: String) {
 
   } //getLinePairs
 
-  def validateConfigFile(): Boolean = {
+  def getValidQueryPairs(): Iterator[List[String]] = {
+    val pairs = getQueryPairs().get
+    pairs.filter {
+      pairList =>
+        val sourceLine = pairList(0).split("::")(1).replaceAll("\"", "")
+        val targetLine = pairList(1).split("::")(1).replaceAll("\"", "")
+
+        !(sourceLine.length < 1) && !(targetLine.length < 1)
+    }
+  }
+
+  private def validateConfigFile(): Boolean = {
     Source.fromFile(fileName).getLines()
-      .filter(!_.isEmpty).length % 2 == 0
+      .filter(line => (!line.isEmpty) && (!line.startsWith("##"))).length % 2 == 0
   } //validateConfigFile
 
 } //OrderedProperties
