@@ -1,14 +1,20 @@
 import scala.io.Source
 
 object LocalTesting {
-  def main(args: Array[String]): Unit = {
-    val jdbcDF = JDBCLoad.getDataFrame("mysql", "select * from customers").get
-    val jdbcSchema = jdbcDF.schema
+  def getValidQueryPairs(pairs: Iterator[List[String]]): Iterator[List[String]] = {
+    println("getValidationPairs")
+    val test = pairs.filter {
+      pairList =>
+        val sourceLine = pairList(0).split("::")(1).replaceAll("\"", "")
+        val targetLine = pairList(1).split("::")(1).replaceAll("\"", "")
 
-    val columnValueCounts = jdbcDF.flatMap(r =>
-      (0 until jdbcSchema.length).map { idx =>
-        //((columnIdx, cellValue), count)
-        ((idx, r.get(idx)), 1l)
-      }).reduceByKey(_ + _)
+        !(sourceLine.length < 1) && !(targetLine.length < 1)
+    }
+    test
+  }
+
+  def main(args: Array[String]): Unit = {
+    val fileName = this.getClass.getClassLoader.getResource("jdbc_properties.conf").getPath
+    val orderedProperties = new OrderedProperties(fileName)
   }
 }
